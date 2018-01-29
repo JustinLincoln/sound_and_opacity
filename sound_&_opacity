@@ -1,0 +1,32 @@
+import processing.video.*;
+Movie movie;
+
+import processing.sound.*;
+float amplitude = 0.00001;
+AudioIn mic;
+Amplitude amp;
+
+
+void setup() {
+  //size(440,440);
+  fullScreen();
+  background(0);
+  movie = new Movie(this, "your movie.mov");
+  movie.loop();
+  mic = new AudioIn(this, 0);
+  mic.start();
+  amp = new Amplitude(this);
+  amp.input(mic);
+}
+
+void movieEvent(Movie m) {
+  m.read();
+}
+
+void draw() {
+  fill(0);
+  rect(0, 0, width, height);
+  float opacity = map(amp.analyze(), 0.001, 0.01, 255, 0);
+  tint(255, opacity);
+  image(movie, 0, 0, width, height);
+}
